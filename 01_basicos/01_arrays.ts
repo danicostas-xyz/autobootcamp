@@ -40,24 +40,26 @@
 
 // console.log(personas2filtered)
 
-const numeros = new Array
+// const numeros = new Array
 
-for (let i = 1; i <=10; i++) {
-    numeros.push(i)
-}
+// for (let i = 1; i <=10; i++) {
+//     numeros.push(i)
+// }
 
-console.log(numeros)
+// console.log(numeros)
 
 
-const suma = numeros.reduce((pv, cv) => {
+// const suma = numeros.reduce((pv, cv) => {
     
-    console.log(`${cv} x ${pv} = ${cv*pv}`)
-    return cv * pv
-})
+//     console.log(`${cv} x ${pv} = ${cv*pv}`)
+//     return cv * pv
+// })
 
 
+const personasX: String[] = ["Dani", "Everlyn", "Marisa"]
+const personasY: String[] = personasX.map(e => e.toUpperCase())
 
 
+console.log(personasY)
 
 
-console.log(suma)
