@@ -56,6 +56,16 @@ const coloresSueltos = colores.flatMap(e => e.split(","))
 // 8. Con reduce, agrupa los libros por género para obtener { "ciencia ficción": [...], "fantasía": [...] }.
 //    El tipo del resultado es Record<string, Libro[]>.
 
+const librosAgrupadosPorGenero : Record<string, Libro[]> = libros.reduce<Record<string,Libro[]>>((acc,libro) => {
+  return {
+    ...acc,
+    [libro.genero]: [...(acc[libro.genero] ?? []), libro]
+  }
+
+}, {})
+
+console.log(librosAgrupadosPorGenero)
+
 // const a: Record<string, Libro[]> = libros.reduce((acc,e) => )
 // ❓ AYUDA EJERCICIO 8 (agrupar con reduce)
 //
@@ -100,12 +110,13 @@ const coloresSueltos = colores.flatMap(e => e.split(","))
 // 9. Con reduce, cuenta cuántos libros hay por género: { "ciencia ficción": 3, "fantasía": 2 }.
 //    Esta vez el tipo es Record<string, number>
 
-
-const librosPorGenero: Record<string, number> = libros.reduce<Record<string,number>>((acc,e) => {
-  return {...acc, e}
-}, {"ciencia ficción": 3})
+const librosPorGenero: Record<string, number> = libros.reduce<Record<string, number>>((acc, libro) => {
+  return {...acc, [libro.genero]: (acc[libro.genero] ?? 0)+1}
+}, {})
 
 console.log(librosPorGenero)
+
+// console.log(librosPorGenero)
 // ❌ CORRECCIÓN EJERCICIO 9: hay tres problemas en tu intento.
 //
 // 1. `return {...acc, e}`: `e` suelto es una abreviatura de `e: e`, así que crea una clave llamada "e" cuyo valor

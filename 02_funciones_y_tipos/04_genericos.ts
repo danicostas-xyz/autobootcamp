@@ -1,11 +1,11 @@
 // GENÉRICOS
 //
 // Un genérico <T> es un HUECO para un tipo, que se rellena cuando usas la función.
-// Analogía: una caja con una etiqueta intercambiable: "Caja de ___".
-// Caja<number> guarda números, Caja<string> guarda textos; la caja es la misma.
+// Analogía: una caja de discos con una etiqueta intercambiable: "Caja de ___".
+// Caja<Disco> guarda discos, Caja<string> guarda textos; la caja es la misma.
 // Ya los usas: Array<number>, Promise<string>, Record<string, number>.
 //
-// Ejemplo (distinto de los ejercicios):
+// Ejemplo:
 //   function primero<T>(lista: T[]): T | undefined { return lista[0] }
 //   primero([1, 2, 3])   // T es number  -> devuelve number | undefined
 //   primero(["a", "b"])  // T es string  -> devuelve string | undefined
@@ -24,57 +24,77 @@
 //
 // Comprobar los tipos: pnpm tsc
 
-interface Usuario {
+interface Artista {
     id: number;
     nombre: string;
-    email: string;
-    telefono?: string;
+    genero: string;
+    scrobbles: number;
+    web?: string;
 }
 
-// 1. `ultimo<T>(lista: T[]): T | undefined`. Pruébala con números y con strings.
+const artistas: Artista[] = [
+    { id: 1, nombre: "Fontaines D.C.", genero: "post-punk", scrobbles: 5626 },
+    { id: 2, nombre: "Deftones", genero: "alt-metal", scrobbles: 3696 },
+    { id: 3, nombre: "Ethel Cain", genero: "art pop", scrobbles: 2978 },
+    { id: 4, nombre: "The Murder Capital", genero: "post-punk", scrobbles: 2413 },
+    { id: 5, nombre: "Alice in Chains", genero: "grunge", scrobbles: 2241 },
+];
+
+// 1. `ultimo<T>(lista: T[]): T | undefined`. Pruébala con los nombres de `artistas` (strings)
+//    y con sus scrobbles (numbers).
 //    Pasa el ratón por encima del resultado: ¿qué T ha deducido TS en cada caso?
 
 
 // 2. `invertir<T>(lista: T[]): T[]` que devuelva una lista nueva invertida SIN modificar la original.
+//    Úsala para ver tu ranking de abajo arriba.
 
 
 // 3. `contarPor<T>(lista: T[], clave: (x: T) => string): Record<string, number>`.
-//    Es el ejercicio 9 del bloque 6, pero para cualquier tipo de lista.
-//    Pruébala con una lista de palabras (clave: primera letra) y con números (clave: "par" / "impar").
+//    Pruébala con `artistas` (clave: género; debe salir post-punk: 2) y con los números
+//    [1977, 1986, 1990, 1997, 2001, 2006] (clave: la década, "1970s", "1980s"...), que son los años
+//    de varias películas de David Lynch.
 
 
 // 4. `agruparPor<T>(lista: T[], clave: (x: T) => string): Record<string, T[]>`.
-//    Pruébala con los libros del bloque 6 (copia el type Libro aquí) y con números.
+//    Pruébala con `artistas` agrupados por género y con una lista de películas de Lynch
+//    (copia aquí el type Pelicula de 02_type_vs_interface.ts) agrupadas por década.
 
 
 // 5. Restricción: `buscarPorId<T extends { id: number }>(lista: T[], id: number): T | undefined`.
-//    Pruébala con un array de Usuario y con un array de productos (otro type con id).
+//    Pruébala con `artistas` y con un array de discos (otro type con id: titulo, artista, anio).
 //    Intenta llamarla con una lista de objetos SIN id y lee el error.
 
 
 // 6. Interface genérica: `interface Caja<T> { contenido: T }`.
-//    Crea una Caja<number> y una Caja<string[]>.
+//    Crea una Caja<number> (los scrobbles de Fontaines D.C.) y una Caja<string[]>
+//    (sus discos: Dogrel, A Hero's Death, Skinty Fia, Romance).
 //    Escribe `mapearCaja<T, U>(c: Caja<T>, fn: (x: T) => U): Caja<U>`.
 
 
-// 7. Una pila (último en entrar, primero en salir) con funciones puras (sin mutar):
-//    type Pila<T> = { items: T[] }
-//    `apilar<T>(p: Pila<T>, x: T): Pila<T>`, `cima<T>(p: Pila<T>): T | undefined`,
-//    `desapilar<T>(p: Pila<T>): Pila<T>`. Comprueba que la pila original no cambia.
+// 7. Una cola de reproducción (el primero en entrar es el primero en sonar) con funciones puras (sin mutar):
+//    type Cola<T> = { items: T[] }
+//    `encolar<T>(c: Cola<T>, x: T): Cola<T>`, `proxima<T>(c: Cola<T>): T | undefined`,
+//    `avanzar<T>(c: Cola<T>): Cola<T>` (quita la primera).
+//    Úsala con canciones: "Starburster", "Change (In the House of Flies)", "Falling".
+//    Comprueba que la cola original no cambia.
 
 
-// 8. Utility types con la interface Usuario de arriba:
-//    a) `actualizarUsuario(u: Usuario, cambios: Partial<Usuario>): Usuario`  (con spread).
-//    b) `type UsuarioPublico = Pick<Usuario, "id" | "nombre">` y una función que convierta Usuario en UsuarioPublico.
-//    c) `type NuevoUsuario = Omit<Usuario, "id">` (un usuario que aún no tiene id) y
-//       `crearUsuario(datos: NuevoUsuario, id: number): Usuario`.
-//    d) `type UsuarioCongelado = Readonly<Usuario>`: intenta modificar un campo y lee el error.
+// 8. Utility types con la interface Artista de arriba:
+//    a) `actualizarArtista(a: Artista, cambios: Partial<Artista>): Artista`  (con spread).
+//       Por ejemplo, sube los scrobbles de Deftones.
+//    b) `type ArtistaPublico = Pick<Artista, "id" | "nombre">` y una función que convierta Artista en ArtistaPublico.
+//    c) `type NuevoArtista = Omit<Artista, "id">` (un artista que aún no tiene id) y
+//       `crearArtista(datos: NuevoArtista, id: number): Artista`.
+//    d) `type ArtistaCongelado = Readonly<Artista>`: intenta modificar un campo y lee el error.
 
 
-// 9. `Record<"admin" | "editor" | "lector", string[]>`: permisos por rol.
-//    Crea un objeto válido. Después quita un rol y lee el error. Añade un rol inventado y lee el error.
+// 9. `Record<"voz" | "guitarra" | "bajo" | "bateria", string[]>`: quién toca qué en Fontaines D.C.
+//    (Grian Chatten, Carlos O'Connell, Conor Curley, Conor Deegan III, Tom Coll).
+//    Crea un objeto válido. Después quita un instrumento y lee el error.
+//    Añade un instrumento inventado ("teclado") y lee el error.
 
 
-// 10. Escribe una función `construirUsuarioDemo()` que devuelva un objeto literal (sin anotar el retorno).
-//     Obtén su tipo SIN escribirlo a mano: `type UsuarioDemo = ReturnType<typeof construirUsuarioDemo>`.
-//     Pasa el ratón por encima de UsuarioDemo y comprueba qué ha deducido TS.
+// 10. Escribe una función `construirDiscoDemo()` que devuelva un objeto literal
+//     (por ejemplo `{ titulo: "Skinty Fia", artista: "Fontaines D.C.", anio: 2022 }`) sin anotar el retorno.
+//     Obtén su tipo SIN escribirlo a mano: `type DiscoDemo = ReturnType<typeof construirDiscoDemo>`.
+//     Pasa el ratón por encima de DiscoDemo y comprueba qué ha deducido TS.
