@@ -56,6 +56,16 @@ const coloresSueltos = colores.flatMap(e => e.split(","))
 // 8. Con reduce, agrupa los libros por género para obtener { "ciencia ficción": [...], "fantasía": [...] }.
 //    El tipo del resultado es Record<string, Libro[]>.
 
+const librosAgrupadosPorGenero : Record<string, Libro[]> = libros.reduce<Record<string,Libro[]>>((acc,libro) => {
+  return {
+    ...acc,
+    [libro.genero]: [...(acc[libro.genero] ?? []), libro]
+  }
+
+}, {})
+
+// console.log(librosAgrupadosPorGenero)
+
 // const a: Record<string, Libro[]> = libros.reduce((acc,e) => )
 // ❓ AYUDA EJERCICIO 8 (agrupar con reduce)
 //
@@ -100,12 +110,13 @@ const coloresSueltos = colores.flatMap(e => e.split(","))
 // 9. Con reduce, cuenta cuántos libros hay por género: { "ciencia ficción": 3, "fantasía": 2 }.
 //    Esta vez el tipo es Record<string, number>
 
+const librosPorGenero: Record<string, number> = libros.reduce<Record<string, number>>((acc, libro) => {
+  return {...acc, [libro.genero]: (acc[libro.genero] ?? 0)+1}
+}, {})
 
-const librosPorGenero: Record<string, number> = libros.reduce<Record<string,number>>((acc,e) => {
-  return {...acc, e}
-}, {"ciencia ficción": 3})
+// console.log(librosPorGenero)
 
-console.log(librosPorGenero)
+// console.log(librosPorGenero)
 // ❌ CORRECCIÓN EJERCICIO 9: hay tres problemas en tu intento.
 //
 // 1. `return {...acc, e}`: `e` suelto es una abreviatura de `e: e`, así que crea una clave llamada "e" cuyo valor
@@ -138,7 +149,7 @@ console.log(librosPorGenero)
 //     Comprueba al final con console.log que el array original no ha cambiado.
 
 const libros2 = [...libros, {
-  titulo: "Ensayo sobre la ceguera", autor: "José Saramago", paginas: 370, leido: true, genero: "ciencia ficción social" 
+  titulo: "Ensayo sobre la ceguera", autor: "José Saramago", paginas: 370, leido: true, genero: "ciencia ficción social"
 }]
 // ✅ EJERCICIO 10 (primera parte): correcto. `[...libros, nuevo]` crea un array nuevo y `libros` no cambia.
 // ⚠️ Mejora: `libros2` no lleva tipo. Anótalo (`const libros2: Libro[] = ...`) y TS comprobará que el libro nuevo
@@ -161,3 +172,4 @@ const libros3: Libro[] = libros.map(e => {
 //      console.log(libros.length, libros2.length)                   // 5 y 6
 //      console.log(libros[1].leido, libros3[1].leido)               // false y true
 //      console.log(libros === libros3, libros[0] === libros3[0])    // false (array nuevo) y true (mismo objeto, no se tocó)
+

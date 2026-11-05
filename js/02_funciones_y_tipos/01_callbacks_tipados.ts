@@ -58,6 +58,14 @@
 //    Crea tres funciones de ese tipo (sin anotar sus parámetros: observa la inferencia contextual):
 //    sumar, restar y multiplicar.
 
+type Operacion = (a: number, b: number, c: number) => number
+const sumar: Operacion = (a,b) => a + b // un parámetro de menos (arity)
+// function sumar2 : Operacion = (a,b) => a+b esto no funciona
+const restar: Operacion = (a,b) => a - b // un parámetro de menos (arity)
+const multiplicar: Operacion = (a,b,c) => a * b * c
+
+console.log(sumar(1,4,1))
+
 
 // 2. [HOF + callback] Escribe `aplicar(a, b, op: Operacion): number`, que invoque el callback `op` con a y b.
 //    Pruébala con los scrobbles de Fontaines D.C. (5626) y Deftones (3696):
