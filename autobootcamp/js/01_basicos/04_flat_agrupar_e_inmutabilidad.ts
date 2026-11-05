@@ -161,3 +161,4 @@ const libros3: Libro[] = libros.map(e => {
 //      console.log(libros.length, libros2.length)                   // 5 y 6
 //      console.log(libros[1].leido, libros3[1].leido)               // false y true
 //      console.log(libros === libros3, libros[0] === libros3[0])    // false (array nuevo) y true (mismo objeto, no se tocó)
+

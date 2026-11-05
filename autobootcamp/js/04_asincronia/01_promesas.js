@@ -1,9 +1,9 @@
 // PROMESAS (JavaScript puro)
 //
-// Una promesa es un "ticket" que te dan por algo que tardará: pides comida en un restaurante,
+// Una promesa es un "ticket" que te dan por algo que tardará: pides un vinilo por encargo en una tienda,
 // te dan un número de pedido y sigues a lo tuyo. Más tarde pasa UNA de dos cosas:
-//   - resolve(valor): la comida llega        -> la promesa se "cumple" (fulfilled)
-//   - reject(error):  "lo siento, no hay"    -> la promesa se "rechaza" (rejected)
+//   - resolve(valor): el disco llega           -> la promesa se "cumple" (fulfilled)
+//   - reject(error):  "lo siento, está agotado" -> la promesa se "rechaza" (rejected)
 // Mientras tanto está "pendiente" (pending).
 //
 // Cómo se consume:
@@ -20,53 +20,63 @@
 //
 // Ejecutar:  pnpm tsx 04_asincronia/01_promesas.js
 
-// Código de apoyo (no hay que tocarlo):
+// Código de apoyo (no hay que tocarlo): simula una consulta a Last.fm que tarda 300 ms.
 const esperar = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function obtenerUsuario(id) {
+const ranking = [
+    { id: 1, nombre: "Fontaines D.C.", scrobbles: 5626 },
+    { id: 2, nombre: "Deftones", scrobbles: 3696 },
+    { id: 3, nombre: "Ethel Cain", scrobbles: 2978 },
+    { id: 4, nombre: "The Murder Capital", scrobbles: 2413 },
+    { id: 5, nombre: "Alice in Chains", scrobbles: 2241 },
+];
+
+function obtenerArtista(id) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            if (id <= 0) reject(new Error("id inválido"));
-            else resolve({ id, nombre: `Usuario ${id}` });
+            const artista = ranking.find((a) => a.id === id);
+            if (artista) resolve(artista);
+            else reject(new Error(`No hay ningún artista con id ${id}`));
         }, 300);
     });
 }
 
-// 1. Crea una promesa con `new Promise` que se resuelva con "hecho" tras 1 segundo.
+// 1. Crea una promesa con `new Promise` que se resuelva con "Skinty Fia" tras 1 segundo.
 //    Consúmela con .then e imprime el valor.
 
 
-// 2. Usa `obtenerUsuario(1)` con .then para imprimir el nombre.
-//    Después prueba `obtenerUsuario(0)` y captura el fallo con .catch.
+// 2. Usa `obtenerArtista(1)` con .then para imprimir su nombre y sus scrobbles.
+//    Después prueba `obtenerArtista(0)` y captura el fallo con .catch.
 
 
-// 3. Encadenamiento: obtén el usuario 1 y, cuando llegue, pide el usuario con id + 1.
+// 3. Encadenamiento: obtén el artista 1 y, cuando llegue, pide el artista con id + 1.
 //    Imprime el segundo. ¿Qué devuelve cada .then? Anótalo en un comentario.
 
 
-// 4. Añade un .finally que imprima "terminado" y comprueba que se ejecuta tanto con éxito como con fallo.
+// 4. Añade un .finally que imprima "consulta terminada" y comprueba que se ejecuta tanto con éxito como con fallo.
 
 
-// 5. Pide los usuarios 1, 2 y 3:
+// 5. Pide los artistas 1, 2 y 3:
 //    a) uno detrás de otro (secuencial),  b) a la vez con Promise.all.
 //    Mide el tiempo de cada versión con console.time / console.timeEnd. ¿Por qué cambia?
 
 
-// 6. `Promise.all` con los ids [1, 0, 3]: ¿qué pasa? Repítelo con `Promise.allSettled`
+// 6. `Promise.all` con los ids [1, 99, 3]: ¿qué pasa? Repítelo con `Promise.allSettled`
 //    e imprime qué ocurrió con cada una.
 
 
-// 7. Promise.race: compite `obtenerUsuario(1)` contra una promesa que rechace con "timeout" tras 100 ms.
+// 7. Promise.race: compite `obtenerArtista(1)` contra una promesa que rechace con "timeout" tras 100 ms.
 //    ¿Quién gana? Cambia el tiempo a 500 ms y comprueba que cambia el resultado.
 
 
 // 8. Escribe `reintentar(fn, intentos)`: `fn` devuelve una promesa; si se rechaza, vuelve a llamarla,
-//    hasta `intentos` veces. Pruébala con una función que falle las dos primeras veces y acierte la tercera.
+//    hasta `intentos` veces. Pruébala con una función que simule "Last.fm no responde"
+//    las dos primeras veces y devuelva datos la tercera.
 
 
 // 9. Orden de ejecución. Predice (SIN ejecutar) el orden en que se imprimirá esto y anótalo en un comentario:
-//      console.log("A");
-//      setTimeout(() => console.log("B"), 0);
-//      Promise.resolve().then(() => console.log("C"));
-//      console.log("D");
+//      console.log("Pongo el disco");
+//      setTimeout(() => console.log("Suena la cara B"), 0);
+//      Promise.resolve().then(() => console.log("Suena la cara A"));
+//      console.log("Subo el volumen");
 //    Ejecútalo y comprueba. Explica por qué (pista: microtareas frente a macrotareas).

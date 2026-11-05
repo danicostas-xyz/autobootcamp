@@ -8,7 +8,10 @@ pídeme que lo corrija y te dejaré los comentarios dentro del propio código.
 
 | Carpeta | Archivo | Tema | Tipo |
 |---|---|---|---|
-| `01_basicos` | `01_arrays` a `04_bloque6` | Arrays, tipos básicos, `type`, `reduce`, inmutabilidad | .ts |
+| `01_basicos` | `01_arrays_basicos` | `push`, `pop`, `forEach`, `filter`, `map`, `reduce` | .ts |
+| | `02_arrays_tipados_y_funciones` | `number[]`, funciones tipadas, `every`, `some`, `find`, `number \| undefined` | .ts |
+| | `03_arrays_de_objetos` | `type`, arrays de objetos, `find`, `toSorted`, `some`/`every` | .ts |
+| | `04_flat_agrupar_e_inmutabilidad` | `flat`, `flatMap`, `Record`, agrupar con `reduce`, copias con spread | .ts |
 | `02_funciones_y_tipos` | `01_callbacks_tipados` | Funciones como valores, callbacks, tipos de función | .ts |
 | | `02_type_vs_interface` | `interface`, `type`, `extends`, `readonly`, opcionales | .ts |
 | | `03_uniones_y_narrowing` | Uniones, literales, type guards, uniones discriminadas | .ts |
@@ -24,9 +27,12 @@ pídeme que lo corrija y te dejaré los comentarios dentro del propio código.
 | `06_hacia_react` | `01_inmutabilidad_y_reducer` | Actualizaciones inmutables, reducer, mini store | .ts |
 | | `02_tipos_de_ui` | Props, estado de carga, validación de formularios | .ts |
 | | `03_composicion_y_funciones_puras` | Funciones puras, `pipe`, currying | .ts |
-| `07_mini_proyecto` | `01_gestor_de_tareas` | Proyecto final: dominio, persistencia y CLI | .ts |
+| `07_mini_proyecto` | `01_biblioteca_musica_y_cine` | Proyecto final: biblioteca de discos y películas (dominio, persistencia y CLI) | .ts |
 
 Los archivos `.js` son JavaScript puro, sin tipos. Algunos terminan con un "reto TS" para pasarlos a TypeScript.
+
+Los ejemplos y datos de prueba usan tu música (artistas de tu Last.fm, sus discos y canciones) y el cine de David Lynch.
+Los datos de ejemplo (géneros, duraciones aproximadas...) sirven para practicar, no son una fuente de referencia.
 
 ## Cómo ejecutar y comprobar
 

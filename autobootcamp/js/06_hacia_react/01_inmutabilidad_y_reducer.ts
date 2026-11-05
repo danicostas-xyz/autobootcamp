@@ -5,7 +5,7 @@
 // pero la dirección es la misma, el cartero no se entera de nada. Para que "se entere", tienes que
 // entregarle una casa nueva con otra dirección: un objeto o array NUEVO, no el mismo modificado.
 //   MAL:  lista.push(x)                BIEN:  const nueva = [...lista, x]
-//   MAL:  obj.edad = 30                BIEN:  const nuevo = { ...obj, edad: 30 }
+//   MAL:  disco.anio = 2025            BIEN:  const nuevo = { ...disco, anio: 2025 }
 //
 // Reducer = una función PURA que recibe el estado actual y una acción, y devuelve el estado NUEVO:
 //   (estado, accion) => nuevoEstado
@@ -16,42 +16,46 @@
 // y se tipa como unión discriminada (mira 02_funciones_y_tipos/03_uniones_y_narrowing.ts).
 //
 // Comprobar los tipos: pnpm tsc      Ejecutar: pnpm tsx 06_hacia_react/01_inmutabilidad_y_reducer.ts
+//
+// Aquí el estado es una playlist con canciones de las bandas sonoras de David Lynch y de tus grupos.
 
-type Tarea = { id: number; texto: string; hecha: boolean };
-type Filtro = "todas" | "pendientes" | "hechas";
-type Estado = { tareas: Tarea[]; filtro: Filtro };
+type Cancion = { id: number; titulo: string; artista: string; favorita: boolean };
+type Filtro = "todas" | "favoritas" | "noFavoritas";
+type Estado = { canciones: Cancion[]; filtro: Filtro };
 
-const tareasIniciales: Tarea[] = [
-    { id: 1, texto: "Aprender TypeScript", hecha: true },
-    { id: 2, texto: "Hacer los ejercicios", hecha: false },
-    { id: 3, texto: "Montar un portfolio", hecha: false },
+const cancionesIniciales: Cancion[] = [
+    { id: 1, titulo: "Falling", artista: "Julee Cruise", favorita: true },          // Twin Peaks
+    { id: 2, titulo: "In Dreams", artista: "Roy Orbison", favorita: false },        // Blue Velvet
+    { id: 3, titulo: "Wicked Game", artista: "Chris Isaak", favorita: false },      // Wild at Heart
+    { id: 4, titulo: "Starburster", artista: "Fontaines D.C.", favorita: true },
 ];
 
-// 1. Actualizaciones inmutables sobre `tareasIniciales` (sin modificarla):
-//    a) añadir una tarea,  b) borrar una por id,  c) alternar `hecha` de una por id,  d) editar el texto de una.
+// 1. Actualizaciones inmutables sobre `cancionesIniciales` (sin modificarla):
+//    a) añadir una canción,  b) borrar una por id,  c) alternar `favorita` de una por id,  d) editar el título de una.
 //    Después de cada una comprueba con `===` que el array nuevo NO es el original
-//    y que `tareasIniciales` conserva su contenido.
+//    y que `cancionesIniciales` conserva su contenido.
 
 
 // 2. Actualización anidada:
-//    type Perfil = { nombre: string; direccion: { ciudad: string; cp: string }; etiquetas: string[] }
-//    Cambia la ciudad creando un perfil nuevo. Comprueba que:
-//      - nuevo.direccion !== original.direccion   (la ruta que cambió es nueva)
-//      - nuevo.etiquetas === original.etiquetas   (lo que no cambió se COMPARTE, no se copia)
+//    type PerfilLastFm = { usuario: string; topArtista: { nombre: string; scrobbles: number }; generos: string[] }
+//    Crea un perfil (top artista: Fontaines D.C., 5626) y cambia el top artista a Deftones (3696)
+//    creando un perfil nuevo. Comprueba que:
+//      - nuevo.topArtista !== original.topArtista   (la ruta que cambió es nueva)
+//      - nuevo.generos === original.generos         (lo que no cambió se COMPARTE, no se copia)
 //    Explica en un comentario por qué compartir lo que no cambió es lo correcto.
 
 
-// 3. Marca el estado como solo lectura: `Readonly<Estado>` y `readonly Tarea[]`.
-//    Intenta hacer `estado.tareas.push(...)` y lee el error de tsc.
+// 3. Marca el estado como solo lectura: `Readonly<Estado>` y `readonly Cancion[]`.
+//    Intenta hacer `estado.canciones.push(...)` y lee el error de tsc.
 
 
 // 4. Define `type Accion` como unión discriminada con estas acciones:
-//    añadir (con `texto`), alternar (con `id`), borrar (con `id`) y cambiarFiltro (con `filtro`).
+//    añadir (con `titulo` y `artista`), alternarFavorita (con `id`), quitar (con `id`) y cambiarFiltro (con `filtro`).
 
 
 // 5. Escribe `reducer(estado: Estado, accion: Accion): Estado` con un `switch (accion.tipo)` exhaustivo
 //    (usa el truco del `never` en el default). Cada caso devuelve un estado NUEVO.
-//    Para el id de las tareas nuevas, usa el máximo id actual + 1.
+//    Para el id de las canciones nuevas, usa el máximo id actual + 1.
 
 
 // 6. Aplica una secuencia de acciones con `reduce` y muestra el estado final:
@@ -60,7 +64,7 @@ const tareasIniciales: Tarea[] = [
 
 
 // 7. Selectores (funciones que "leen" del estado):
-//    `tareasVisibles(estado: Estado): Tarea[]` según el filtro, y `contarPendientes(estado: Estado): number`.
+//    `cancionesVisibles(estado: Estado): Cancion[]` según el filtro, y `contarFavoritas(estado: Estado): number`.
 
 
 // 8. Mini store, con closures y genéricos:
